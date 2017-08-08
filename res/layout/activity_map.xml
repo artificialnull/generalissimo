@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gabdeg.generalissimo.GameActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/map_swipe_layout"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <it.sephiroth.android.library.imagezoom.ImageViewTouch
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:layout_above="@+id/navbar"
+            android:id="@+id/map"
+            android:visibility="visible"/>
+
+        <android.support.constraint.ConstraintLayout
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/navbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.9"
+                android:id="@+id/map_nav_sep"
+                tools:layout_editor_absoluteY="623dp"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.2"
+                android:id="@+id/segment1"
+                tools:layout_editor_absoluteY="81dp"
+                tools:layout_editor_absoluteX="82dp" />
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.4"
+                android:id="@+id/segment2"
+                tools:layout_editor_absoluteY="81dp"
+                tools:layout_editor_absoluteX="165dp" />
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.6"
+                android:id="@+id/segment3"
+                tools:layout_editor_absoluteY="81dp"
+                tools:layout_editor_absoluteX="247dp" />
+
+            <android.support.constraint.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.8"
+                android:id="@+id/segment4"
+                tools:layout_editor_absoluteY="81dp"
+                tools:layout_editor_absoluteX="329dp" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="&lt;&lt;"
+                android:id="@+id/map_double_back"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/map_nav_sep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/segment1" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="&lt;"
+                android:id="@+id/map_back"
+                app:layout_constraintLeft_toLeftOf="@+id/segment1"
+                app:layout_constraintTop_toTopOf="@+id/map_nav_sep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/segment2" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="\?"
+                android:id="@+id/map_preview"
+                app:layout_constraintLeft_toLeftOf="@+id/segment2"
+                app:layout_constraintTop_toTopOf="@+id/map_nav_sep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/segment3" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="&gt;"
+                android:id="@+id/map_front"
+                app:layout_constraintLeft_toLeftOf="@+id/segment3"
+                app:layout_constraintTop_toTopOf="@+id/map_nav_sep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/segment4" />
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="&gt;&gt;"
+                android:id="@+id/map_double_front"
+                app:layout_constraintLeft_toLeftOf="@+id/segment4"
+                app:layout_constraintTop_toTopOf="@+id/map_nav_sep"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.design.widget.CoordinatorLayout>

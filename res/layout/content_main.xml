@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.gabdeg.generalissimo.MainActivity"
+    tools:showIn="@layout/activity_main"
+    android:id="@+id/layout"
+    android:weightSum="1">
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/left_edge"
+        app:layout_constraintGuide_percent="0"
+        android:orientation="vertical" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/right_edge"
+        app:layout_constraintGuide_percent="1"
+        android:orientation="vertical"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/top_edge"
+        app:layout_constraintGuide_percent="0"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bottom_edge"
+        app:layout_constraintGuide_percent="1"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_button_separator"
+        app:layout_constraintGuide_percent=".7"
+        android:orientation="vertical" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_map_separator"
+        app:layout_constraintGuide_percent="0.1"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_step_separator"
+        app:layout_constraintGuide_percent="0.9"
+        android:orientation="horizontal"/>
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/middle"
+        app:layout_constraintGuide_percent=".5"
+        android:orientation="vertical" />
+
+    <Button
+        android:text="Submit"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/button"
+        app:layout_constraintLeft_toLeftOf="@+id/text_button_separator"
+        app:layout_constraintRight_toRightOf="@+id/right_edge"
+        app:layout_constraintTop_toTopOf="@+id/top_edge"
+        app:layout_constraintBottom_toBottomOf="@+id/input_map_separator"
+        android:onClick="submitGameID"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/textBox"
+        android:inputType="number"
+        app:layout_constraintLeft_toLeftOf="@+id/left_edge"
+        app:layout_constraintRight_toRightOf="@+id/text_button_separator"
+        app:layout_constraintTop_toTopOf="@+id/top_edge"
+        app:layout_constraintBottom_toBottomOf="@+id/input_map_separator"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/world"
+        app:layout_constraintLeft_toLeftOf="@+id/left_edge"
+        app:layout_constraintRight_toRightOf="@+id/right_edge"
+        app:layout_constraintTop_toTopOf="@+id/input_map_separator"
+        app:layout_constraintBottom_toBottomOf="@+id/map_step_separator"
+        android:id="@+id/map"
+        android:visibility="visible"
+        />
+
+    <ProgressBar
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/left_edge"
+        app:layout_constraintRight_toRightOf="@+id/right_edge"
+        app:layout_constraintTop_toTopOf="@+id/input_map_separator"
+        app:layout_constraintBottom_toBottomOf="@+id/map_step_separator"
+        android:id="@+id/mapLoading"
+        style="@android:style/Widget.Material.ProgressBar"
+        android:visibility="invisible"
+        />
+
+    <Button
+        android:text="Back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/decrementButton"
+        app:layout_constraintLeft_toLeftOf="@+id/left_edge"
+        app:layout_constraintRight_toRightOf="@+id/middle"
+        app:layout_constraintTop_toTopOf="@+id/map_step_separator"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_edge"
+        android:onClick="decrement"/>
+
+    <Button
+        android:text="Forward"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/incrementButton"
+        app:layout_constraintLeft_toLeftOf="@+id/middle"
+        app:layout_constraintRight_toRightOf="@+id/right_edge"
+        app:layout_constraintTop_toTopOf="@+id/map_step_separator"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_edge"
+        android:onClick="increment"/>
+</android.support.constraint.ConstraintLayout>
+
