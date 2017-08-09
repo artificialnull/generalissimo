@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         Log.v("CREDENTIALS_GOTTEN", username + " - " + password);
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("dippyUsernm", username);
-        editor.putString("dippyPasswd", password);
+        editor.putString("dippyUsernm", username.substring(0, Math.min(username.length(), 30)));
+        editor.putString("dippyPasswd", password.substring(0, Math.min(password.length(), 30)));
         editor.apply();
 
         new ValidateCredentialsTask().execute(username, password);

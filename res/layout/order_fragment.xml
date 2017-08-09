@@ -1,74 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Orders"
-        android:textSize="24sp"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"/>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
-        <View
-            android:background="@color/cardview_light_background"
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    cardView:cardCornerRadius="2dp"
+    cardView:cardElevation="2dp"
+    cardView:contentPaddingBottom="8dp"
+    cardView:contentPaddingTop="8dp"
+    cardView:contentPaddingLeft="8dp"
+    cardView:contentPaddingRight="8dp">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-    </RelativeLayout>
+            android:layout_height="wrap_content">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/order_recycler_view"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:nestedScrollingEnabled="false" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orders"
+                android:textSize="24sp"
+                android:paddingStart="16dp"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp"
+                android:id="@+id/order_header_text"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No orders to submit"
-        android:textSize="20sp"
-        android:paddingStart="8dp"
-        android:id="@+id/order_none_message"
-        android:visibility="gone"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/order_save_button"
+                android:text="save"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_toLeftOf="@+id/order_ready_button"
+                android:layout_centerVertical="true"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp"/>
 
-    <android.support.constraint.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/order_ready_button"
+                android:text="ready"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
 
-        <android.support.constraint.Guideline
-            android:layout_width="wrap_content"
+                android:paddingTop="24dp"
+                android:paddingBottom="16dp"/>
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/order_recycler_view"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/order_button_separator"
-            app:layout_constraintGuide_percent="0.5"
-            android:orientation="vertical"/>
-        <Button
+            android:nestedScrollingEnabled="false"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="24dp"
+            android:paddingTop="0dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="No orders to submit"
+            android:textSize="14sp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="24dp"
+            android:paddingTop="8dp"
+            android:id="@+id/order_none_message"
+            android:visibility="gone"/>
+
+
+        <WebView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_save_button"
-            android:text="save"
-            app:layout_constraintRight_toRightOf="@+id/order_button_separator"
-            app:layout_constraintLeft_toLeftOf="parent"/>
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_ready_button"
-            android:text="ready"
-            app:layout_constraintLeft_toLeftOf="@+id/order_button_separator"
-            app:layout_constraintRight_toRightOf="parent"/>
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:id="@+id/webview" />
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-    <WebView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:id="@+id/webview" />
+</android.support.v7.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>
