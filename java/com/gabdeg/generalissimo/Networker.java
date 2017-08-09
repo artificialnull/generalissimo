@@ -11,7 +11,9 @@ import java.net.CookieManager;
 import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -58,7 +60,11 @@ public class Networker {
         urlConnection.setChunkedStreamingMode(0);
 
         OutputStream outp = urlConnection.getOutputStream();
-        outp.write(paramStr.getBytes(Charset.forName("UTF-8")));
+        outp.write(URLEncoder.encode(paramStr, "UTF-8")
+                .replace("%3D", "=")
+                .replace("%26", "&")
+                .getBytes(Charset.forName("UTF-8")));
+        Log.v("PASSWORD_ENCODED", URLEncoder.encode(paramStr, "UTF-8"));
 
         Map<String, List<String>> headerFields = urlConnection.getHeaderFields();
         List<String> cookieHeader = headerFields.get("Set-Cookie");
