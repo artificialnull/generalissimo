@@ -45,6 +45,12 @@ public class Networker {
         return s.hasNext() ? s.next() : "";
     }
 
+    public String postAsString(String urlStr, String paramStr) throws IOException {
+        InputStream inp = post(urlStr, paramStr);
+        Scanner s = new java.util.Scanner(inp).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+    }
+
     public InputStream post(String urlStr, String paramStr) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

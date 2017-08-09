@@ -136,7 +136,7 @@ public class MapActivity extends AppCompatActivity {
             /*try {
                 browser.post(
                         "http://webdiplomacy.net/index.php",
-                        "loginuser=pieman2201&loginpass=toaster"
+                        "loginuser=pieman2201&loginpass=REDACTED"
                 );
             } catch (Exception err) {
                 err.printStackTrace();

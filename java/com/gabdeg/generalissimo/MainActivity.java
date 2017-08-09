@@ -1,33 +1,116 @@
 package com.gabdeg.generalissimo;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 
-
 public class MainActivity extends AppCompatActivity {
+
+    public static final String PREFS_NAME = "GeneralissimoPrefsFile";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(R.string.app_name);
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        String password = settings.getString("dippyPasswd", null);
+        if (password == null) {
+            getUserCredentials(false);
+        } else {
+            onCredentialsGotten(
+                    settings.getString("dippyUsernm", null),
+                    settings.getString("dippyPasswd", null)
+            );
+        }
+
+    }
+
+    public void getUserCredentials(boolean wasInvalid) {
+        Log.v("GET_CREDENTIALS", "Getting...");
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.remove("dippyPasswd");
+        editor.remove("dippyUsernm");
+        editor.apply();
+
+        LoginDialogFragment loginDialogFragment = new LoginDialogFragment();
+        if (wasInvalid) {
+            loginDialogFragment.showInvalidBanner();
+        }
+        loginDialogFragment.show(getFragmentManager(), "login");
+
+
+    }
+
+    public void onCredentialsGotten(String username, String password) {
+
+        Log.v("CREDENTIALS_GOTTEN", username + " - " + password);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString("dippyUsernm", username);
+        editor.putString("dippyPasswd", password);
+        editor.apply();
+
+        new ValidateCredentialsTask().execute(username, password);
+
+    }
+
+    private class ValidateCredentialsTask extends AsyncTask<String, Void, Integer> {
+
+        protected Integer doInBackground(String... strings) {
+            Networker browser = new Networker();
+            String username = strings[0];
+            String password = strings[1];
+
+            try {
+
+                String result = browser.postAsString(
+                        "http://webdiplomacy.net/index.php",
+                        "loginuser=" + username + "&loginpass=" + password
+                );
+
+                Log.v("POST_RESULT", result);
+                if (result.contains("<title>Error - webDiplomacy</title>")) {
+                    return 1;
+                }
+            } catch (Exception err) {
+                err.printStackTrace();
+            }
+
+            return 0;
+
+        }
+
+        protected void onPostExecute(Integer status) {
+
+            if (status == 0) {
+                onCredentialsValidated();
+            } else {
+                getUserCredentials(true);
+            }
+        }
+    }
+
+    public void onCredentialsValidated() {
         InputFragment firstFragment = new InputFragment();
         firstFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container, firstFragment).commit();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
         getSupportActionBar().setTitle("Home");
-
-
-
     }
 
     @Override
@@ -52,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            getUserCredentials(false);
             return true;
         }
 
