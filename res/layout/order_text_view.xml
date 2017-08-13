@@ -19,7 +19,6 @@
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="20dp"
-                android:src="@drawable/army"
                 android:id="@+id/unit_icon"
                 android:paddingEnd="10dp"
                 android:layout_centerVertical="true"/>
@@ -28,6 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=""
+                android:src="@drawable/army"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/unit_icon"
                 android:textSize="14sp"

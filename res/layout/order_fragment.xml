@@ -10,10 +10,11 @@
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     cardView:cardCornerRadius="2dp"
     cardView:cardElevation="2dp"
-    cardView:contentPaddingBottom="8dp"
-    cardView:contentPaddingTop="8dp"
-    cardView:contentPaddingLeft="8dp"
-    cardView:contentPaddingRight="8dp">
+    cardView:contentPaddingBottom="0dp"
+    cardView:contentPaddingTop="0dp"
+    cardView:contentPaddingLeft="0dp"
+    cardView:contentPaddingRight="0dp"
+    android:id="@+id/order_card_view">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical" android:layout_width="match_parent"
@@ -23,40 +24,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Orders"
-                android:textSize="24sp"
-                android:paddingStart="16dp"
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp"
-                android:id="@+id/order_header_text"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"/>
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Orders"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="24sp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:id="@+id/order_header_text"
+                    android:layout_centerVertical="true"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/order_save_button"
-                android:text="save"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_toLeftOf="@+id/order_ready_button"
-                android:layout_centerVertical="true"
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/order_ready_button"
-                android:text="ready"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/order_expand_button"
+                    android:paddingEnd="16dp"
+                    android:src="@drawable/unexpand"
+                    android:tint="?android:textColorPrimary"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"/>
 
-                android:paddingTop="24dp"
-                android:paddingBottom="16dp"/>
+            </RelativeLayout>
 
         </RelativeLayout>
 
@@ -66,9 +64,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingBottom="24dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="8dp"
             android:paddingTop="0dp"/>
 
         <TextView
@@ -79,9 +77,40 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:paddingBottom="24dp"
-            android:paddingTop="8dp"
+            android:paddingTop="24dp"
             android:id="@+id/order_none_message"
             android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="0dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:id="@+id/order_button_layout">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/order_save_button"
+                android:text="save"
+                style="?android:attr/borderlessButtonStyle"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:layout_alignParentStart="true"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/order_ready_button"
+                android:text="ready"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_toRightOf="@+id/order_save_button"/>
+
+        </RelativeLayout>
 
 
         <WebView

@@ -3,8 +3,10 @@ package com.gabdeg.generalissimo;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +30,15 @@ import org.json.JSONArray;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpCookie;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class OrderFragment extends Fragment {
@@ -52,7 +61,12 @@ public class OrderFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private Button saveButton;
     private Button readyButton;
+    private ImageButton expandButton;
     private TextView noOrderMessage;
+    private CardView cardView;
+    private RelativeLayout buttonLayout;
+
+    public boolean isExpanded = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater,
@@ -79,6 +93,8 @@ public class OrderFragment extends Fragment {
         }
 
         view = inflater.inflate(R.layout.order_fragment, container, false);
+
+        cardView = (CardView) view.findViewById(R.id.order_card_view);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.order_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -116,7 +132,39 @@ public class OrderFragment extends Fragment {
                 }
         );
 
+        buttonLayout = (RelativeLayout) view.findViewById(R.id.order_button_layout) ;
         noOrderMessage = (TextView) view.findViewById(R.id.order_none_message);
+
+        expandButton = (ImageButton) view.findViewById(R.id.order_expand_button);
+        expandButton.setBackground(null);
+        expandButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TransitionManager.beginDelayedTransition(cardView);
+                        if (isExpanded) {
+                            saveButton.setVisibility(View.GONE);
+                            readyButton.setVisibility(View.GONE);
+                            mRecyclerView.setVisibility(View.GONE);
+                            noOrderMessage.setVisibility(View.GONE);
+                            buttonLayout.setVisibility(View.GONE);
+                            expandButton.setImageResource(R.drawable.expand);
+                            isExpanded = false;
+                        } else {
+                            if (orders.size() > 0) {
+                                mRecyclerView.setVisibility(View.VISIBLE);
+                                saveButton.setVisibility(View.VISIBLE);
+                                readyButton.setVisibility(View.VISIBLE);
+                                buttonLayout.setVisibility(View.VISIBLE);
+                            } else {
+                                noOrderMessage.setVisibility(View.VISIBLE);
+                            }
+                            expandButton.setImageResource(R.drawable.unexpand);
+                            isExpanded = true;
+                        }
+                    }
+                }
+        );
 
         getGamePage(gameID);
 
@@ -201,11 +249,13 @@ public class OrderFragment extends Fragment {
                                 readyButton.setVisibility(View.GONE);
                                 mRecyclerView.setVisibility(View.GONE);
                                 noOrderMessage.setVisibility(View.VISIBLE);
+                                buttonLayout.setVisibility(View.GONE);
                             } else {
                                 saveButton.setVisibility(View.VISIBLE);
                                 readyButton.setVisibility(View.VISIBLE);
                                 mRecyclerView.setVisibility(View.VISIBLE);
                                 noOrderMessage.setVisibility(View.GONE);
+                                buttonLayout.setVisibility(View.VISIBLE);
                             }
                             isFinishedLoading = true;
                             Log.v("ORDER_FRAGMENT", "Finished loading here!");
@@ -356,140 +406,38 @@ public class OrderFragment extends Fragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 Log.v("COOKIE", CookieManager.getInstance().getCookie(url));
-                /*
-                webView.loadUrl("javascript:window.HTMLViewer.showHTML" +
-                        "('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');"
-                );
-                */
 
-                webView.loadUrl("javascript:SimpleOrders = [];\n" +
-                        "if (typeof MyOrders === \"undefined\") {\n" +
-                        "\tMyOrders = [];\n" +
-                        "}\n" +
-                        "for (var i = 0; i < MyOrders.length; i++) {\n" +
-                        "\torder = MyOrders[i];\n" +
-                        "\tsimpleOrder = {};\n" +
-                        "\ttypeChoices = order.updateTypeChoices();\n" +
-                        "\tif (typeof typeChoices._object !== \"undefined\") {\n" +
-                        "\t\ttypeChoices = typeChoices._object;\n" +
-                        "    }\n" +
-                        "\n" +
-                        "\tsimpleOrder.OrderInfo = {\n" +
-                        "\t\ttype: order.type,\n" +
-                        "\t\ttoTerrID: order.toTerrID,\n" +
-                        "\t\tfromTerrID: order.fromTerrID,\n" +
-                        "\t\tviaConvoy: order.viaConvoy,\n" +
-                        "\t\tid: order.id\n" +
-                        "    };\n" +
-                        "\n" +
-                        "\tif (order.viaConvoy === \"\") { simpleOrder.OrderInfo.viaConvoy = \"No\"; }\n" +
-                        "\n" +
-                        "\tfor (var key in typeChoices) {\n" +
-                        "\t\tsimpleOrder[key] = {\n" +
-                        "\t\t\tname: typeChoices[key],\n" +
-                        "\t\t\tresults: {},\n" +
-                        "\t\t\tprefix: \"\"\n" +
-                        "        };\n" +
-                        "\t\tif (typeof order.beginHTML() !== \"undefined\") {\n" +
-                        "\t\t\tsimpleOrder[key].prefix = order.beginHTML().trim();\n" +
-                        "        }\n" +
-                        "\t\torder.inputValue(\"type\", key);\n" +
-                        "\t\tif (typeof order.updateToTerrChoices() !== \"undefined\") {\n" +
-                        "            for (var id in order.updateToTerrChoices()._object) {\n" +
-                        "\t\t\t\ttry {\n" +
-                        "                \torder.inputValue(\"toTerrID\", id);\n" +
-                        "                } catch (err) {\n" +
-                        "\t\t\t\t\torder.updateValue(\"toTerrID\", id);\n" +
-                        "                }\n" +
-                        "\t\t\t\ttoTerrName = order.updateToTerrChoices()._object[id];\n" +
-                        "                simpleOrder[key][\"results\"][id] = {\n" +
-                        "                    name: toTerrName,\n" +
-                        "\t\t\t\t\tresults: {},\n" +
-                        "\t\t\t\t\tprefix: order.toTerrHTML().split(\"<\")[0].replace(toTerrName, \"\").trim()\n" +
-                        "\n" +
-                        "                };\n" +
-                        "\n" +
-                        "\t\t\t\tif (typeof order.updateViaConvoyChoices() !== \"undefined\") {\n" +
-                        "\t\t\t\t\tfor (var cid in order.updateViaConvoyChoices()._object) {\n" +
-                        "\t\t\t\t\t\torder.inputValue(\"viaConvoy\", cid);\n" +
-                        "\t\t\t\t\t\tsimpleOrder[key][\"results\"][id][\"results\"][cid] = {\n" +
-                        "\t\t\t\t\t\t\tname: order.updateViaConvoyChoices()._object[cid],\n" +
-                        "\t\t\t\t\t\t\tresults: {},\n" +
-                        "\t\t\t\t\t\t\tprefix: \"\"\n" +
-                        "                        };\n" +
-                        "\t\t\t\t\t\tif (typeof order.convoyPath !== \"undefined\") { \n" +
-                        "\t\t\t\t\t\t\tsimpleOrder[key][\"results\"][id][\"results\"][cid].prefix = order.convoyPath.toString();\n" +
-                        "                        }\n" +
-                        "                    }\n" +
-                        "                }\n" +
-                        "\n" +
-                        "\t\t\t\tif (typeof order.updateFromTerrChoices() !== \"undefined\") {\n" +
-                        "\t\t\t\t\tfromTerrChoices = order.updateFromTerrChoices()._object;\n" +
-                        "\t\t\t\t\tfromTerrHTML = order.fromTerrHTML();\n" +
-                        "\n" +
-                        "                    for (var fid in fromTerrChoices) {\n" +
-                        "\t\t\t\t\t\ttry {\n" +
-                        "\t\t\t\t\t\t\torder.inputValue(\"fromTerrID\", fid);\n" +
-                        "                        } catch (err) {\n" +
-                        "\t\t\t\t\t\t\torder.updateValue(\"fromTerrID\", fid);\n" +
-                        "                        }\n" +
-                        "\t\t\t\t\t\tfromTerrName = fromTerrChoices[fid];\n" +
-                        "\t\t\t\t\t\tif (typeof fromTerrName === \"undefined\") {\n" +
-                        "\t\t\t\t\t\t\tconsole.log(key, id, fid, order.updateFromTerrChoices());\n" +
-                        "                        }\n" +
-                        "\t\t\t\t\t\tsimpleOrder[key][\"results\"][id][\"results\"][fid] = {\n" +
-                        "                        \tname: fromTerrName,\n" +
-                        "\t\t\t\t\t\t\tresults: {},\n" +
-                        "\t\t\t\t\t\t\tprefix: fromTerrHTML.split(\"<\")[0].replace(fromTerrName, \"\").trim()\n" +
-                        "                        };\n" +
-                        "\t\t\t\t\t\tif (key === \"Convoy\") {\n" +
-                        "\t\t\t\t\t\t\tsimpleOrder[key][\"results\"][id][\"results\"][fid][\"results\"][\"Yes\"] = {\n" +
-                        "\t\t\t\t\t\t\t\tname: \"via convoy\",\n" +
-                        "\t\t\t\t\t\t\t\tresults: {},\n" +
-                        "\t\t\t\t\t\t\t\tprefix: \"\"\n" +
-                        "                            };\n" +
-                        "                            if (typeof order.convoyPath !== \"undefined\") { \n" +
-                        "                            \tsimpleOrder[key][\"results\"][id][\"results\"][fid][\"results\"][\"Yes\"].prefix = order.convoyPath.toString();\n" +
-                        "                            }\n" +
-                        "                        }\n" +
-                        "\t\t\t\t\t\tif (key === \"Support move\") {\n" +
-                        "\t\t\t\t\t\t\tif (typeof order.convoyPath !== \"undefined\" && order.convoyPath.length > 0) {\n" +
-                        "\t\t\t\t\t\t\t\tsimpleOrder[key][\"results\"][id][\"results\"][fid][\"results\"][\"Yes\"] = {\n" +
-                        "                                    name: \"via convoy\",\n" +
-                        "                                    results: {},\n" +
-                        "                                    prefix: \"\"\n" +
-                        "                           \t\t};\n" +
-                        "                            \tsimpleOrder[key][\"results\"][id][\"results\"][fid][\"results\"][\"Yes\"].prefix = order.convoyPath.toString();\n" +
-                        "                            }\n" +
-                        "                        }\n" +
-                        "                    }\n" +
-                        "                } \n" +
-                        "            }\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "\t\n" +
-                        "\tif (typeof order.Unit !== \"undefined\") {\n" +
-                        "\t\tsimpleOrder.UnitInfo = {\n" +
-                        "\t\t\ttype: order.Unit.type,\n" +
-                        "\t\t\tid: order.Unit.id,\n" +
-                        "\t\t\tterr: {\n" +
-                        "\t\t\t\tid: order.Unit.terrID,\n" +
-                        "\t\t\t\tname: Territories._object[order.Unit.terrID].name\n" +
-                        "            }\n" +
-                        "        }\n" +
-                        "    }\n" +
-                        "\t\n" +
-                        "\tSimpleOrders.push(simpleOrder);\n" +
-                        "} window.HTMLViewer.getUnitData(JSON.stringify(SimpleOrders));");
+                String orderJS = null;
+                try {
+                    InputStream inp = getActivity().getAssets().open("orders.js");
+
+                    StringBuilder buf = new StringBuilder();
+                    BufferedReader in = new BufferedReader(
+                            new InputStreamReader(
+                                    inp, "UTF-8"
+                            )
+                    );
+                    String line = null;
+                    while ((line = in.readLine()) != null) {
+                        buf.append(line).append('\n');
+                    }
+
+                    orderJS = buf.toString();
+
+                } catch (Exception err) {
+                    err.printStackTrace();
+                }
+
+                webView.loadUrl(
+                        "javascript:" +
+                        orderJS +
+                        "window.HTMLViewer.getUnitData(JSON.stringify(SimpleOrders));"
+                );
 
                 webView.loadUrl("javascript:window.HTMLViewer.getSessionData" +
                         "(JSON.stringify([context, contextKey]));"
                 );
 
-                /*
-                webView.loadUrl("javascript:window.HTMLViewer.getOrdersData" +
-                        "(JSON.stringify(ordersData));"
-                );*/
             }
         });
 

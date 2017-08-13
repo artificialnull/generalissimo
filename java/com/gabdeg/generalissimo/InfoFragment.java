@@ -86,6 +86,21 @@ public class InfoFragment extends Fragment {
         }
     }
 
+    public Bitmap cropBitmapTo16x9(Bitmap toCrop) {
+        float width = toCrop.getWidth();
+        float height = toCrop.getHeight();
+
+        float newHeight = (width / 16) * 9;
+
+        return Bitmap.createBitmap(
+                toCrop,
+                0,
+                Math.round((height - newHeight) / 2),
+                Math.round(width),
+                Math.round(newHeight)
+        );
+    }
+
     public void updateGameView() {
         ((TextView) view.findViewById(R.id.info_phase_type)).setText(
                 game.getGamePhaseType()
@@ -96,9 +111,25 @@ public class InfoFragment extends Fragment {
         ((TextView) view.findViewById(R.id.info_country_name)).setTextColor(
                 Color.parseColor(game.getGameNation().getColor())
         );
-        ((TextView) view.findViewById(R.id.info_unit_count)).setText(
+        TextView unitCount = ((TextView) view.findViewById(R.id.info_unit_count));
+        unitCount.setText(
                 game.getGameNation().getUnits()
         );
+        try {
+            if (Integer.parseInt(game.getGameNation().getUnits().split(" ")[0])
+                    > Integer.parseInt(game.getGameNation().getCps().split(" ")[0])) {
+                unitCount.setTextColor(Color.parseColor("#ff5555"));
+            } else if (Integer.parseInt(game.getGameNation().getUnits().split(" ")[0])
+                    < Integer.parseInt(game.getGameNation().getCps().split(" ")[0])) {
+                unitCount.setTextColor(Color.parseColor("#009902"));
+            } else {
+                unitCount.setTextColor(defaultTextColor);
+            }
+        } catch (NumberFormatException err) {
+            Log.v("PARSE_INT", "Couldnt PRASE!!IO");
+            unitCount.setTextColor(defaultTextColor);
+        }
+
         ((TextView) view.findViewById(R.id.info_cp_count)).setText(
                 game.getGameNation().getCps()
         );
@@ -113,17 +144,18 @@ public class InfoFragment extends Fragment {
             mGameOrderStatus.setTextColor(Color.parseColor("#009902"));
         } else if (game.getGameOrderStatus().equals("Not received")) {
             mGameOrderStatus.setText("!!");
-            mGameOrderStatus.setTextColor(Color.parseColor("#aa0000"));
+            mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
         } else if (game.getGameOrderStatus().equals("Not completed")) {
             mGameOrderStatus.setText("!");
-            mGameOrderStatus.setTextColor(Color.parseColor("#aa0000"));
+            mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
         } else if (game.getGameOrderStatus().equals("Completed")){
             mGameOrderStatus.setText("✓");
-            mGameOrderStatus.setTextColor(defaultTextColor);
-            // default text color is fine
+            mGameOrderStatus.setTextColor(Color.parseColor("#000000"));
+            // change to dark because of light circle background
         } else {
             mGameOrderStatus.setText("―");
-            mGameOrderStatus.setTextColor(defaultTextColor);
+            mGameOrderStatus.setTextColor(Color.parseColor("#000000"));
+
             // same as above
         }
 
@@ -146,7 +178,7 @@ public class InfoFragment extends Fragment {
                             game.getReadableTimeToPhase()
                     );
                     if (game.getSecondsToPhase() <= 300) {
-                        mGamePhaseTime.setTextColor(Color.parseColor("#aa0000"));
+                        mGamePhaseTime.setTextColor(Color.parseColor("#ff5555"));
                     } else {
                         mGamePhaseTime.setTextColor(defaultTextColor);
                     }
@@ -220,7 +252,7 @@ public class InfoFragment extends Fragment {
             if (thumbnail == null) {
                 thumbnail = BitmapFactory.decodeResource(getResources(), R.drawable.sadface);
             }
-            thumbnail = cropBitmapToSquare(thumbnail);
+            thumbnail = cropBitmapTo16x9(thumbnail);
 
             return null;
         }

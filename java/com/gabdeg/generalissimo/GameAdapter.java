@@ -95,15 +95,21 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 holder.mGameOrderStatus.setTextColor(Color.parseColor("#009902"));
             } else if (game.getGameOrderStatus().equals("Not received")) {
                 holder.mGameOrderStatus.setText("!!");
-                holder.mGameOrderStatus.setTextColor(Color.parseColor("#aa0000"));
+                holder.mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
             } else if (game.getGameOrderStatus().equals("Not completed")) {
                 holder.mGameOrderStatus.setText("!");
-                holder.mGameOrderStatus.setTextColor(Color.parseColor("#aa0000"));
+                holder.mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
             } else if (game.getGameOrderStatus().equals("Completed")){
                 holder.mGameOrderStatus.setText("✓");
+                holder.mGameOrderStatus.setTextColor(
+                        mContext.getResources().getColor(android.R.color.secondary_text_dark)
+                );
                 // default text color is fine
             } else {
                 holder.mGameOrderStatus.setText("―");
+                holder.mGameOrderStatus.setTextColor(
+                        mContext.getResources().getColor(android.R.color.secondary_text_dark)
+                );
                 // same as above
             }
 
@@ -116,7 +122,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 game.getReadableTimeToPhase()
         );
         if (game.getSecondsToPhase() <= 300) {
-            holder.mGamePhaseTime.setTextColor(Color.parseColor("#aa0000"));
+            holder.mGamePhaseTime.setTextColor(Color.parseColor("#ff5555"));
         }
         holder.mGameLayout.setOnClickListener(
                 new View.OnClickListener() {
