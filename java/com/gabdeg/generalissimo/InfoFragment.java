@@ -121,7 +121,7 @@ public class InfoFragment extends Fragment {
                 unitCount.setTextColor(Color.parseColor("#ff5555"));
             } else if (Integer.parseInt(game.getGameNation().getUnits().split(" ")[0])
                     < Integer.parseInt(game.getGameNation().getCps().split(" ")[0])) {
-                unitCount.setTextColor(Color.parseColor("#009902"));
+                unitCount.setTextColor(Color.parseColor("#00bf03"));
             } else {
                 unitCount.setTextColor(defaultTextColor);
             }
@@ -144,10 +144,10 @@ public class InfoFragment extends Fragment {
             mGameOrderStatus.setTextColor(Color.parseColor("#009902"));
         } else if (game.getGameOrderStatus().equals("Not received")) {
             mGameOrderStatus.setText("!!");
-            mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
+            mGameOrderStatus.setTextColor(Color.parseColor("#aa0000"));
         } else if (game.getGameOrderStatus().equals("Not completed")) {
             mGameOrderStatus.setText("!");
-            mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
+            mGameOrderStatus.setTextColor(Color.parseColor("#aa0000"));
         } else if (game.getGameOrderStatus().equals("Completed")){
             mGameOrderStatus.setText("✓");
             mGameOrderStatus.setTextColor(Color.parseColor("#000000"));

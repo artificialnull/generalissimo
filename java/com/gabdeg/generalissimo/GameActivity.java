@@ -17,6 +17,7 @@ public class GameActivity extends AppCompatActivity {
 
     InfoFragment infoFragment;
     OrderFragment orderFragment;
+    MessageFragment messageFragment;
 
 
     @Override
@@ -33,10 +34,12 @@ public class GameActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(game.getGameName());
 
 
-        infoFragment  = new InfoFragment();
+        infoFragment = new InfoFragment();
         orderFragment = new OrderFragment();
+        messageFragment = new MessageFragment();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.map_fragment);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(480);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -51,14 +54,18 @@ public class GameActivity extends AppCompatActivity {
         args.putSerializable(GAME_INFO, game);
         infoFragment.setArguments(args);
         orderFragment.setArguments(args);
+        messageFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager()
                 .beginTransaction();
         transaction.replace(R.id.map_container, infoFragment);
         transaction.commit();
 
-        transaction = getSupportFragmentManager()
-                .beginTransaction();
+        transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.message_container, messageFragment);
+        transaction.commit();
+
+        transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.order_container, orderFragment);
         transaction.commit();
 

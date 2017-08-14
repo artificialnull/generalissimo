@@ -1,24 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:padding="10dp">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <android.support.v7.widget.CardView android:layout_width="match_parent"
         android:layout_height="wrap_content"
         xmlns:cardView="http://schemas.android.com/apk/res-auto"
         cardView:cardCornerRadius="2dp"
         cardView:cardElevation="2dp"
-        cardView:contentPaddingBottom="8dp"
-        cardView:contentPaddingTop="8dp"
-        cardView:contentPaddingLeft="8dp"
-        cardView:contentPaddingRight="8dp">
+        cardView:contentPaddingBottom="0dp"
+        cardView:contentPaddingTop="0dp"
+        cardView:contentPaddingLeft="0dp"
+        cardView:contentPaddingRight="0dp">
 
-        <android.support.v7.widget.RecyclerView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </android.support.v7.widget.RecyclerView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nations"
+                    android:textColor="?android:textColorPrimary"
+                    android:textSize="24sp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:id="@+id/message_header_text"
+                    android:layout_centerVertical="true"/>
+
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/message_expand_button"
+                    android:paddingEnd="16dp"
+                    android:src="@drawable/unexpand"
+                    android:tint="?android:textColorPrimary"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"/>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="0dp"
+                android:id="@+id/message_recycler_view"/>
+
+        </LinearLayout>
 
     </android.support.v7.widget.CardView>
 

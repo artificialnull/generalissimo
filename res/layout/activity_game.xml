@@ -48,6 +48,13 @@
                     />
 
                 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/message_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    />
+
+                <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/order_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

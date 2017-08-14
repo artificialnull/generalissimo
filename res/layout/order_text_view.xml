@@ -8,89 +8,83 @@
     android:paddingBottom="8dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/order_header">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_header">
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="20dp"
-                android:id="@+id/unit_icon"
-                android:paddingEnd="10dp"
-                android:layout_centerVertical="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:src="@drawable/army"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/unit_icon"
-                android:textSize="14sp"
-                android:id="@+id/order_prefix" />
-
-        </RelativeLayout>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/order_header"
-            android:id="@+id/order_type_spinner"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:id="@+id/unit_icon"
+            android:paddingEnd="10dp"
+            android:layout_centerVertical="true"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="to"
-            android:id="@+id/order_to_prefix"
-            android:layout_toEndOf="@+id/order_type_spinner"
-            android:layout_alignBottom="@+id/order_type_spinner"
-            android:visibility="gone"
+            android:text=""
+            android:src="@drawable/army"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/unit_icon"
             android:textSize="14sp"
-            />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_to_spinner"
-            android:layout_below="@+id/order_to_prefix"
-            android:layout_alignParentStart="true"
-            android:visibility="gone"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="from"
-            android:id="@+id/order_from_prefix"
-            android:layout_toEndOf="@+id/order_to_spinner"
-            android:layout_alignBottom="@+id/order_to_spinner"
-            android:visibility="gone"
-            android:textSize="14sp"
-            />
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_from_spinner"
-            android:layout_below="@+id/order_from_prefix"
-            android:layout_alignParentStart="true"
-            android:visibility="gone"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/order_via_spinner"
-            android:layout_below="@+id/order_to_spinner"
-            android:layout_alignParentStart="true"
-            android:visibility="gone"
-            android:textSize="14sp"
-            />
+            android:id="@+id/order_prefix" />
 
     </RelativeLayout>
 
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/order_header"
+        android:id="@+id/order_type_spinner"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="to"
+        android:id="@+id/order_to_prefix"
+        android:layout_toEndOf="@+id/order_type_spinner"
+        android:layout_alignBottom="@+id/order_type_spinner"
+        android:visibility="gone"
+        android:textSize="14sp"
+        />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/order_to_spinner"
+        android:layout_below="@+id/order_to_prefix"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="from"
+        android:id="@+id/order_from_prefix"
+        android:layout_toEndOf="@+id/order_to_spinner"
+        android:layout_alignBottom="@+id/order_to_spinner"
+        android:visibility="gone"
+        android:textSize="14sp"
+        />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/order_from_spinner"
+        android:layout_below="@+id/order_from_prefix"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/order_via_spinner"
+        android:layout_below="@+id/order_to_spinner"
+        android:layout_alignParentStart="true"
+        android:visibility="gone"
+        android:textSize="14sp"
+        />
 
 </RelativeLayout>
+

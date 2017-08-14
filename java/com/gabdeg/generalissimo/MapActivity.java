@@ -55,6 +55,8 @@ public class MapActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(game.getGameName());
         Log.v("GAME_ID", String.valueOf(gameID));
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.map_swipe_layout);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(480);
+
         mSwipeRefreshLayout.setEnabled(false);
 
         ((Button) findViewById(R.id.map_double_back)).setOnClickListener(

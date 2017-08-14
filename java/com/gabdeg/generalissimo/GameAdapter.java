@@ -92,7 +92,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
             if (game.getGameOrderStatus().equals("Ready")) {
                 holder.mGameOrderStatus.setText("✓");
-                holder.mGameOrderStatus.setTextColor(Color.parseColor("#009902"));
+                holder.mGameOrderStatus.setTextColor(Color.parseColor("#66ff68"));
             } else if (game.getGameOrderStatus().equals("Not received")) {
                 holder.mGameOrderStatus.setText("!!");
                 holder.mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));

@@ -256,6 +256,7 @@ public class InputFragment extends Fragment {
         );
         */
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.input_fragment);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(480);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

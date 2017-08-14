@@ -37,9 +37,26 @@ public class Nation implements Serializable {
         this.cps = cps;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private String name;
     private String color;
     private String units;
     private String cps;
+    private String id;
+
+    public String toString() {
+        return getName() + ":\n  "
+                + getId() + "\n  "
+                + getCps() + "\n  "
+                + getUnits() + "\n  "
+                + getColor();
+    }
 
 }
