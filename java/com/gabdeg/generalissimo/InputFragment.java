@@ -169,6 +169,9 @@ public class InputFragment extends Fragment {
 
                                         nation.setColor(
                                                 String.format("#%02x%02x%02x", r, g, b));
+
+                                        j = styleDeclaration.getLength();
+                                        i = ruleList.getLength();
                                     }
                                 }
                             }

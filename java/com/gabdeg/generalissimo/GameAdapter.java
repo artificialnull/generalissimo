@@ -92,7 +92,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
 
             if (game.getGameOrderStatus().equals("Ready")) {
                 holder.mGameOrderStatus.setText("✓");
-                holder.mGameOrderStatus.setTextColor(Color.parseColor("#66ff68"));
+                holder.mGameOrderStatus.setTextColor(Color.parseColor("#00bf03"));
             } else if (game.getGameOrderStatus().equals("Not received")) {
                 holder.mGameOrderStatus.setText("!!");
                 holder.mGameOrderStatus.setTextColor(Color.parseColor("#ff5555"));
@@ -114,7 +114,7 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
             }
 
             if (game.getGameMessageStatus()) {
-                holder.mGameMailStatus.setText("✉");
+                holder.mGameMailStatus.setText("⬤");
             }
         }
 

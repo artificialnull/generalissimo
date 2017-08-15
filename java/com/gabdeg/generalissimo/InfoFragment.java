@@ -159,11 +159,12 @@ public class InfoFragment extends Fragment {
             // same as above
         }
 
+        /*
         if (game.getGameMessageStatus()) {
             ((TextView) view.findViewById(R.id.info_mail_status)).setText("✉");
         } else {
             ((TextView) view.findViewById(R.id.info_mail_status)).setVisibility(View.INVISIBLE);
-        }
+        }*/
 
         if (thumbnail != null) {
             ((ImageView) view.findViewById(R.id.map_image_small)).setImageBitmap(thumbnail);

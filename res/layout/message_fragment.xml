@@ -13,7 +13,8 @@
         cardView:contentPaddingBottom="0dp"
         cardView:contentPaddingTop="0dp"
         cardView:contentPaddingLeft="0dp"
-        cardView:contentPaddingRight="0dp">
+        cardView:contentPaddingRight="0dp"
+        android:id="@+id/message_card_view">
 
         <LinearLayout
             android:layout_width="match_parent"

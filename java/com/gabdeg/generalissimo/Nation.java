@@ -45,6 +45,17 @@ public class Nation implements Serializable {
         this.id = id;
     }
 
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    private String orderStatus;
+
+
     private String name;
     private String color;
     private String units;

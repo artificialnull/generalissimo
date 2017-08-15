@@ -4,8 +4,10 @@ package com.gabdeg.generalissimo;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 
 import com.steadystate.css.parser.CSSOMParser;
 
@@ -36,11 +39,18 @@ public class MessageFragment extends Fragment {
     Networker browser = new Networker();
     PageParser parser = new PageParser();
 
+    private View view;
+
+    ImageButton expandButton;
+
     ArrayList<NationChatPair> nations = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    public boolean isFinishedLoading = false;
+    boolean isExpanded = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,19 +59,60 @@ public class MessageFragment extends Fragment {
         gameID = ((DiplomacyGame) getArguments().getSerializable(GameActivity.GAME_INFO))
                 .getGameID();
 
-        View view = inflater.inflate(R.layout.message_fragment, container, false);
+        view = inflater.inflate(R.layout.message_fragment, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.message_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new NationAdapter(nations, (AppCompatActivity) getActivity());
+        mAdapter = new NationAdapter(nations,
+                ((DiplomacyGame) getArguments().getSerializable(GameActivity.GAME_INFO)).getGameNation(),
+                (AppCompatActivity) getActivity());
         mRecyclerView.setAdapter(mAdapter);
+
+
+        expandButton = (ImageButton) view.findViewById(R.id.message_expand_button);
+        expandButton.setBackground(null);
+        expandButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (isExpanded) {
+                            retractFragment();
+                        } else {
+                            expandFragment();
+                        }
+                    }
+                }
+        );
 
         new GetNeighborsTask().execute(gameID);
 
         return view;
+    }
 
+    public void expandFragment() {
+        TransitionManager.beginDelayedTransition(
+                (CardView) view.findViewById(R.id.message_card_view)
+        );
+        mRecyclerView.setVisibility(View.VISIBLE);
+        expandButton.setImageResource(R.drawable.unexpand);
+        isExpanded = true;
+    }
+
+    public void retractFragment() {
+        TransitionManager.beginDelayedTransition(
+                (CardView) view.findViewById(R.id.message_card_view)
+        );
+        mRecyclerView.setVisibility(View.GONE);
+        expandButton.setImageResource(R.drawable.expand);
+        isExpanded = false;
+    }
+
+    public void refreshNeighbors() {
+        isFinishedLoading = false;
+        expandFragment();
+        new GetNeighborsTask().execute(gameID);
     }
 
     private class GetNeighborsTask extends AsyncTask<Integer, Void, Integer> {
@@ -107,6 +158,29 @@ public class MessageFragment extends Fragment {
             }
 
             CSSRuleList ruleList = styles.getCssRules();
+
+            Nation global = new Nation();
+            global.setName("Global");
+            global.setId("country0");
+            global.setUnits("Global");
+            global.setCps("thingo is the best nondescriptor");
+            global.setColor("#CE7800");
+
+            Chat globalChat = null;
+            try {
+                globalChat = new Chat();
+                globalChat.setUrl(
+                        "http://webdiplomacy.net" +
+                                parser.select("#chatboxtabs").first().select(".country0").first()
+                                        .attr("href").substring(1)
+                );
+            } catch (Exception err) {
+                Log.v("CHAT_FINDER", "Could not find chat for nation GLOBAL");
+            }
+
+            nations.add(new NationChatPair(
+                global, globalChat
+            ));
 
             for (Element webNation : webNations) {
 
@@ -183,15 +257,47 @@ public class MessageFragment extends Fragment {
 
                                     nation.setColor(
                                             String.format("#%02x%02x%02x", r, g, b));
+                                    j = styleDeclaration.getLength();
+                                    i = ruleList.getLength();
                                 }
                             }
                         }
                     }
                 }
 
+                Element gameUserDetail = webNation.select("td").first().select(".memberCountryName").first();
+                if (gameUserDetail.html().contains("Completed")) {
+                    nation.setOrderStatus("Completed");
+                } else if (gameUserDetail.html().contains("Ready")) {
+                    nation.setOrderStatus("Ready");
+                } else if (gameUserDetail.html().contains("Not received")) {
+                    nation.setOrderStatus("Not received");
+                } else if (gameUserDetail.html().contains("not completed")) {
+                    nation.setOrderStatus("Not completed");
+                } else {
+                    nation.setOrderStatus("None");
+                }
+
                 Log.v("MESSAGE_NATION", nation.toString());
 
-                nations.add(new NationChatPair(nation, null));
+                Chat chat = new Chat();
+                try {
+                    chat.setUrl(
+                            "http://webdiplomacy.net" +
+                                    parser.select("#chatboxtabs").first().select("." + nation.getId()).first()
+                                            .attr("href").substring(1)
+                    );
+                    chat.setUnread(false);
+                    if (parser.select("#chatboxtabs").first().select("." + nation.getId())
+                            .first().html().contains("Unread message")) {
+                        chat.setUnread(true);
+                    }
+                } catch (Exception err) {
+                    chat = null;
+                    Log.v("CHAT_FINDER", "Could not find chat for nation " + nation.getName());
+                }
+
+                nations.add(new NationChatPair(nation, chat));
             }
 
             return 0;
@@ -202,6 +308,10 @@ public class MessageFragment extends Fragment {
             } else {
                 mAdapter.notifyDataSetChanged();
             }
+
+            isFinishedLoading = true;
+            ((GameActivity) getActivity()).isFinished();
+
         }
     }
 

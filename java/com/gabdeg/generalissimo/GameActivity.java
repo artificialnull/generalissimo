@@ -82,6 +82,7 @@ public class GameActivity extends AppCompatActivity {
 
         Log.v("GAME_FRAGMENT", "REFRESHING!");
         infoFragment.refreshInfo();
+        messageFragment.refreshNeighbors();
         orderFragment = new OrderFragment();
         Bundle args = new Bundle();
         args.putSerializable(GAME_INFO, game);
@@ -96,7 +97,8 @@ public class GameActivity extends AppCompatActivity {
 
     public void isFinished() {
         Log.v("IS_FINISHED", "Someone finished doing something I guess...");
-        if (orderFragment.isFinishedLoading && infoFragment.isFinishedLoading) {
+        if (orderFragment.isFinishedLoading && infoFragment.isFinishedLoading
+                && messageFragment.isFinishedLoading) {
             mSwipeRefreshLayout.setRefreshing(false);
             Log.v("EVERYONE_IS_FINISHED", "Wahoo!");
         }

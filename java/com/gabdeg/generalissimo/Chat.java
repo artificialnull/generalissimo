@@ -1,23 +1,17 @@
 package com.gabdeg.generalissimo;
 
+import java.io.Serializable;
+
 /**
  * Created by ishan on 8/14/17.
  */
 
-public class Chat {
-    public Nation getNation() {
-        return nation;
-    }
-
-    public void setNation(Nation nation) {
-        this.nation = nation;
-    }
-
-    public boolean isCanChat() {
+public class Chat implements Serializable {
+    public boolean canChat() {
         return canChat;
     }
 
-    public void setCanChat(boolean canChat) {
+    public void setChattiness(boolean canChat) {
         this.canChat = canChat;
     }
 
@@ -29,7 +23,26 @@ public class Chat {
         this.rand = rand;
     }
 
-    private Nation nation;
     private boolean canChat;
     private String rand;
+
+    public boolean hasUnread() {
+        return hasUnread;
+    }
+
+    public void setUnread(boolean hasUnread) {
+        this.hasUnread = hasUnread;
+    }
+
+    private boolean hasUnread;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    private String url;
 }

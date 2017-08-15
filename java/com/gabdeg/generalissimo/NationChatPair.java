@@ -1,8 +1,9 @@
 package com.gabdeg.generalissimo;
 
 
+import java.io.Serializable;
 
-public class NationChatPair {
+public class NationChatPair implements Serializable {
 
     public Nation getNation() {
         return nation;
