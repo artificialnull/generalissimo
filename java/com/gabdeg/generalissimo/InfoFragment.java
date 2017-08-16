@@ -262,7 +262,10 @@ public class InfoFragment extends Fragment {
             updateGameView();
             isFinishedLoading = true;
             Log.v("INFO_FRAGMENT", "Finished loading here!");
-            ((GameActivity) getActivity()).isFinished();
+            if (getActivity() != null) {
+                ((GameActivity) getActivity()).isFinished();
+            }
+
         }
     }
 

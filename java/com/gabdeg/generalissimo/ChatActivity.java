@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -75,15 +76,34 @@ public class ChatActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Chat: " + chatInfo.getNation().getName());
 
+        ((EditText) findViewById(R.id.message_text_input)).setOnFocusChangeListener(
+                new View.OnFocusChangeListener() {
+                    @Override
+                    public void onFocusChange(View v, boolean hasFocus) {
+                        if (msgs.size() > 0) {
+                            mRecyclerView.scrollToPosition(msgs.size() - 1);
+                        }
+                    }
+                }
+        );
+
 
         findViewById(R.id.message_send_button).setOnClickListener(
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        /*
                         Toast.makeText(getApplicationContext(),
                                 ((EditText) findViewById(R.id.message_text_input)).getText(),
                                 Toast.LENGTH_SHORT)
                                 .show();
+                                */
+
+                        new SendMessageTask().execute(
+                                ((EditText) findViewById(R.id.message_text_input)).getText()
+                                        .toString()
+                        );
+
                         ((EditText) findViewById(R.id.message_text_input)).setText("");
                     }
                 }
@@ -91,6 +111,39 @@ public class ChatActivity extends AppCompatActivity {
 
         new GetMessagesTask().execute(chatInfo.getChat().getUrl());
 
+    }
+
+    private class SendMessageTask extends AsyncTask<String, Void, Integer> {
+
+        protected Integer doInBackground(String... params) {
+
+            try {
+                Networker browser = new Networker();
+                browser.post(
+                        chatInfo.getChat().getUrl(),
+                        "newmessage=" + params[0]
+                        + "&formTicket=" + chatInfo.getChat().getRand()
+                        + "&Send=Send"
+                );
+            } catch (Exception err) {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        protected void onPostExecute(Integer status) {
+            if (status == 0) {
+                Toast.makeText(
+                        getApplicationContext(), "Message sent", Toast.LENGTH_SHORT
+                ).show();
+            } else {
+                Toast.makeText(
+                        getApplicationContext(), "Failed to send message!", Toast.LENGTH_LONG
+                ).show();
+            }
+            new GetMessagesTask().execute(chatInfo.getChat().getUrl());
+        }
     }
 
     private class GetMessagesTask extends AsyncTask<String, Void, Integer> {
@@ -106,6 +159,14 @@ public class ChatActivity extends AppCompatActivity {
             } catch (Exception err) {
                 err.printStackTrace();
                 return 1;
+            }
+
+            try {
+                chatInfo.getChat().setRand(parser.select(".send input[name=formTicket]")
+                        .first().attr("value"));
+                chatInfo.getChat().setChattiness(true);
+            } catch (Exception err) {
+                chatInfo.getChat().setChattiness(false);
             }
 
             Element chatBox = parser.select("div#chatboxscroll").first().select("table.chatbox").first();
@@ -211,6 +272,15 @@ public class ChatActivity extends AppCompatActivity {
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(msgs.size() - 1);
                 mSwipeRefreshLayout.setRefreshing(false);
+                if (!chatInfo.getChat().canChat()) {
+                    Log.v("CAN_CHAT", "NOPE NOPE NOPE");
+                    ((EditText) findViewById(R.id.message_text_input))
+                            .setFocusable(false);
+                } else {
+                    ((EditText) findViewById(R.id.message_text_input))
+                            .setFocusableInTouchMode(true);
+                    Log.v("CHAT_RAND", chatInfo.getChat().getRand());
+                }
 
             }
         }

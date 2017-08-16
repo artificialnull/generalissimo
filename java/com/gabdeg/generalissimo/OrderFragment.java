@@ -259,7 +259,9 @@ public class OrderFragment extends Fragment {
                             }
                             isFinishedLoading = true;
                             Log.v("ORDER_FRAGMENT", "Finished loading here!");
-                            ((GameActivity) getActivity()).isFinished();
+                            if (getActivity() != null) {
+                                ((GameActivity) getActivity()).isFinished();
+                            }
                         }
                     }
             );

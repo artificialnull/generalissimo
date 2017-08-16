@@ -310,7 +310,9 @@ public class MessageFragment extends Fragment {
             }
 
             isFinishedLoading = true;
-            ((GameActivity) getActivity()).isFinished();
+            if (getActivity() != null) {
+                ((GameActivity) getActivity()).isFinished();
+            }
 
         }
     }
