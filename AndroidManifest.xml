@@ -10,6 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <receiver android:name=".AlarmReceiver">
+
+        </receiver>
+
+        <service
+            android:name=".CheckGameService"
+            android:exported="false">
+
+        </service>
+
         <activity
             android:name="com.gabdeg.generalissimo.MainActivity"
             android:label="@string/app_name"
@@ -43,6 +54,7 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+
     </application>
 
 </manifest>

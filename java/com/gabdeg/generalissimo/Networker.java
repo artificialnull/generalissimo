@@ -24,7 +24,9 @@ public class Networker {
     static CookieManager cookieManager = new CookieManager();
 
     public Networker() {
-        CookieHandler.setDefault(cookieManager);
+        if (CookieHandler.getDefault() == null) {
+            CookieHandler.setDefault(cookieManager);
+        }
     }
 
     public InputStream get(String urlStr) throws IOException {
@@ -64,7 +66,7 @@ public class Networker {
                 .replace("%3D", "=")
                 .replace("%26", "&")
                 .getBytes(Charset.forName("UTF-8")));
-        Log.v("PASSWORD_ENCODED", URLEncoder.encode(paramStr, "UTF-8"));
+        //Log.v("PASSWORD_ENCODED", URLEncoder.encode(paramStr, "UTF-8"));
 
         Map<String, List<String>> headerFields = urlConnection.getHeaderFields();
         List<String> cookieHeader = headerFields.get("Set-Cookie");

@@ -121,6 +121,7 @@ public class InputFragment extends Fragment {
                 newGame.setGameName(gameTitleBar.text());
 
                 Element gameTimeRemaining = game.select(".timeremaining").first();
+
                 newGame.setGameTimeOfPhase(Long.parseLong(gameTimeRemaining.attr("unixtime")));
                 Log.v(newGame.getGameName(), String.valueOf(newGame.getGameTimeOfPhase()));
 

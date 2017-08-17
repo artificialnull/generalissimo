@@ -140,7 +140,7 @@ public class NationAdapter extends RecyclerView.Adapter<NationAdapter.ViewHolder
                 );
             }
 
-            Log.v("CHAT_URL", chat.getUrl());
+            //Log.v("CHAT_URL", chat.getUrl());
         }
 
         holder.mChatButton.setOnClickListener(
