@@ -46,15 +46,19 @@ for (var i = 0; i < MyOrders.length; i++) {
                     name: toTerrName,
                     results: {},
                     prefix: toTerrHTML.split("<")[0]
-                        .replace(toTerrName, "")
-                        .replace("undefined", "").trim()
+                    .replace(toTerrName, "")
+                    .replace("undefined", "").trim()
 
                 };
 
                 if (typeof order.updateViaConvoyChoices() !== "undefined") {
                     for (var cid in order.updateViaConvoyChoices()._object) {
-                        order.inputValue("viaConvoy", cid);
-                        order.updateValue("viaConvoy", cid);
+                        try {
+                            order.inputValue("viaConvoy", cid);
+                            order.updateValue("viaConvoy", cid);
+                        } catch (err) {
+                            order.updateValue("viaConvoy", cid);
+                        }
                         simpleOrder[key]["results"][id]["results"][cid] = {
                             name: order.updateViaConvoyChoices()._object[cid],
                             results: {},
@@ -85,8 +89,8 @@ for (var i = 0; i < MyOrders.length; i++) {
                             name: fromTerrName,
                             results: {},
                             prefix: fromTerrHTML.split("<")[0]
-                                .replace(fromTerrName, "")
-                                .replace("undefined", "").trim()
+                            .replace(fromTerrName, "")
+                            .replace("undefined", "").trim()
                         };
                         if (key === "Convoy") {
                             simpleOrder[key]["results"][id]["results"][fid]["results"]["Yes"] = {
