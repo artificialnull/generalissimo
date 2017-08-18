@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -232,11 +233,15 @@ public class CheckGameService extends IntentService {
                     args.putSerializable(GameActivity.GAME_INFO, newGame);
                     intent.putExtras(args);
 
-                    PendingIntent pendingIntent = PendingIntent.getActivity(
-                            this,
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                    stackBuilder.addParentStack(GameActivity.class);
+                    stackBuilder.addNextIntent(intent);
+
+
+                    PendingIntent pendingIntent = stackBuilder.getPendingIntent(
                             newGame.getGameID(),
-                            intent,
-                            PendingIntent.FLAG_CANCEL_CURRENT);
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
 
                     Notification notif = new Notification.Builder(this)
                             .setContentTitle(newGame.getGameName())
