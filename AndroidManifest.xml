@@ -15,6 +15,10 @@
 
         </receiver>
 
+        <receiver android:name=".NotificationActionReceiver">
+
+        </receiver>
+
         <service
             android:name=".CheckGameService"
             android:exported="false">

@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
@@ -235,7 +236,9 @@ public class CheckGameService extends IntentService {
                     newGame.setGameMessageStatus(false);
                 }
 
-                if (!gameStatus.isEmpty()) {
+                if (!gameStatus.isEmpty() &&
+                        !settings.getString(String.valueOf(newGame.getGameID()), "CrashOverride")
+                                .equals(newGame.getGamePhaseDate() + newGame.getGamePhaseType())) {
 
                     Intent intent = new Intent(this, GameActivity.class);
                     Bundle args = new Bundle();
@@ -256,12 +259,40 @@ public class CheckGameService extends IntentService {
                             .setContentTitle(newGame.getGameName())
                             .setContentText(gameStatus)
                             .setSmallIcon(R.drawable.army)
+                            .addAction(
+                                    new Notification.Action.Builder(
+                                            R.drawable.remove,
+                                            "DISMISS FOR PHASE",
+                                            PendingIntent.getBroadcast(
+                                                    this, 1,
+                                                    new Intent(this, NotificationActionReceiver.class)
+                                                            .putExtra("GAMEID", newGame.getGameID())
+                                                            .putExtra("GAMEPHASE", newGame.getGamePhaseDate() + newGame.getGamePhaseType()),
+                                                    PendingIntent.FLAG_CANCEL_CURRENT
+                                            )
+                                    ).build()
+                            )
+                            /*
+                            .addAction(
+                                    new Notification.Action.Builder(
+                                            R.drawable.army,
+                                            "DISABLE FOR GAME",
+                                            PendingIntent.getBroadcast(
+                                                    this, 2,
+                                                    new Intent(this, NotificationActionReceiver.class),
+                                                    PendingIntent.FLAG_CANCEL_CURRENT
+                                            )
+                                    ).build()
+                            )*/
                             .setAutoCancel(true)
                             .setContentIntent(pendingIntent).build();
 
                     NotificationManager notifManager =
                             (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     notifManager.notify(newGame.getGameID(), notif);
+                } else if (settings.getString(String.valueOf(newGame.getGameID()), "CrashOverride")
+                        .equals(newGame.getGamePhaseDate() + newGame.getGamePhaseType())) {
+                    Log.v("NOTIFS", "User dismissed notifs for this phase of this game");
                 }
 
             } catch (NullPointerException err) {
