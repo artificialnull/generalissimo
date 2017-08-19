@@ -7,37 +7,52 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String PREFS_NAME = "GeneralissimoPrefsFile";
-
-    private PendingIntent pendingIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Map<String, ?> allEntries = settings.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            Log.v("MAP_VALUES", entry.getKey() + ": " + entry.getValue().toString());
+        }
 
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         manager.setInexactRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
-                AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+                Integer.parseInt(
+                        settings.getString("notifCheckInterval", "1337")
+                ),
+                pendingIntent
+        );
+
+        Log.v("SET_ALARM", "Setting alarm for every "
+                + String.valueOf(settings.getString("notifCheckInterval", "1337"))
+                + " milliseconds"
+        );
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.app_name);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         String password = settings.getString("dippyPasswd", null);
         if (password == null) {
             getUserCredentials(false);
@@ -52,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void getUserCredentials(boolean wasInvalid) {
         Log.v("GET_CREDENTIALS", "Getting...");
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = settings.edit();
         editor.remove("dippyPasswd");
         editor.remove("dippyUsernm");
@@ -70,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCredentialsGotten(String username, String password) {
 
         Log.v("CREDENTIALS_GOTTEN", username + " - " + password);
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = settings.edit();
         editor.putString("dippyUsernm", username.substring(0, Math.min(username.length(), 30)));
         editor.putString("dippyPasswd", password.substring(0, Math.min(password.length(), 30)));
@@ -148,7 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            getUserCredentials(false);
+            Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 

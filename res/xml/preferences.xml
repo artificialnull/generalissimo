@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:key="notifStatus"
+        android:title="Enable game status notifications"
+        android:summary="The app will check for impending NMRs and unread messages and will notify you periodically"
+        android:defaultValue="true" />
+
+    <ListPreference
+        android:dependency="notifStatus"
+        android:key="notifCheckInterval"
+        android:title="Check for game updates every"
+        android:dialogTitle="Check for game updates every"
+        android:entries="@array/notifUpdateIntervalEntries"
+        android:entryValues="@array/notifUpdateIntervalEntryValues"
+        android:defaultValue="1800000"
+        android:summary="%s" />
+
+    <CheckBoxPreference
+        android:dependency="notifStatus"
+        android:key="notifNMRStatus"
+        android:title="Enable NMR notifications"
+        android:summary="Get notifications every set interval if you have not submitted orders for a game"
+        android:defaultValue="true" />
+
+    <CheckBoxPreference
+        android:dependency="notifStatus"
+        android:key="notifUnreadStatus"
+        android:title="Enable Unread Message notifications"
+        android:summary="Get notifications every set interval if you have an unread message in a game"
+        android:defaultValue="true" />
+
+    <Preference
+        android:title="Log out"
+        android:summary="Log out of your account in the app. You will need to enter your username and password to log in again"
+        android:key="logOutButton" />
+
+</PreferenceScreen>

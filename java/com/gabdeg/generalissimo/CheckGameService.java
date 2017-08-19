@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
@@ -68,7 +69,7 @@ public class CheckGameService extends IntentService {
                 .getCookies().toString());
         */
 
-        SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String username = settings.getString("dippyUsernm", null);
         String password = settings.getString("dippyPasswd", null);
         if (password == null) {
@@ -209,7 +210,11 @@ public class CheckGameService extends IntentService {
                     newGame.setGameOrderStatus("Ready");
                 } else if (gameUserDetail.html().contains("Not received")) {
                     newGame.setGameOrderStatus("Not received");
-                    gameStatus += "No orders received";
+                    if (settings.getBoolean("notifNMRStatus", true)) {
+                        gameStatus += "No orders received";
+                    } else {
+                        Log.v("NOTIFS", "User chose to not get NMR notifs");
+                    }
                 } else if (gameUserDetail.html().contains("not completed")) {
                     newGame.setGameOrderStatus("Not completed");
                 } else {
@@ -218,10 +223,14 @@ public class CheckGameService extends IntentService {
 
                 if (gameUserDetail.html().contains("Unread message")) {
                     newGame.setGameMessageStatus(true);
-                    if (!gameStatus.isEmpty()) {
-                        gameStatus += " - ";
+                    if (settings.getBoolean("notifUnreadStatus", true)) {
+                        if (!gameStatus.isEmpty()) {
+                            gameStatus += " - ";
+                        }
+                        gameStatus += "Unread message";
+                    } else {
+                        Log.v("NOTIFS", "User chose to not get Unread notifs");
                     }
-                    gameStatus += "Unread message";
                 } else {
                     newGame.setGameMessageStatus(false);
                 }
