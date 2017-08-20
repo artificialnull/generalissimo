@@ -1,12 +1,17 @@
 package com.gabdeg.generalissimo;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -54,6 +59,20 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
         );
         holder.msgContent.setText(
                 msgs.get(position).getContent()
+        );
+        holder.msgContent.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ClipboardManager clipboardManager =
+                                (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("chat message",
+                                holder.msgContent.getText());
+                        clipboardManager.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Copied message to clipboard", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
         );
     }
 

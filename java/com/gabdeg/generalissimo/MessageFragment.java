@@ -175,6 +175,7 @@ public class MessageFragment extends Fragment {
                                         .attr("href").substring(1)
                 );
             } catch (Exception err) {
+                globalChat = null;
                 Log.v("CHAT_FINDER", "Could not find chat for nation GLOBAL");
             }
 
@@ -187,6 +188,8 @@ public class MessageFragment extends Fragment {
                 //Log.v("MESSAGE_HTML", webNation.html());
 
                 Nation nation = new Nation();
+                Chat chat = new Chat();
+
 
                 try {
                     nation.setId(
@@ -203,6 +206,20 @@ public class MessageFragment extends Fragment {
                         rr.printStackTrace();
                         nation.setId("ERROR!");
                     }
+                } catch (NullPointerException err) {
+                    // pregame
+                    nation.setId("none");
+                    nation.setName("N/A");
+
+                    nation.setUnits(parser.select(".occupationBarJoined").first().attr("style").split(":")[1] + " joined");
+                    nation.setCps(parser.select(".occupationBarNotJoined").first().attr("style").split(":")[1] + " not joined");
+
+
+                    nation.setColor("#000000");
+                    nation.setOrderStatus("None");
+                    chat = null;
+                    nations.add(new NationChatPair(nation, chat));
+                    continue;
                 }
 
                 nation.setName(webNation.select("td").first().select(".memberCountryName")
@@ -280,7 +297,6 @@ public class MessageFragment extends Fragment {
 
                 Log.v("MESSAGE_NATION", nation.toString());
 
-                Chat chat = new Chat();
                 try {
                     chat.setUrl(
                             "http://webdiplomacy.net" +

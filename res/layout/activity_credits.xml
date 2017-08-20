@@ -45,8 +45,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:autoLink="web"
-                android:text="Source code available online, licensed under GPLv3"
-                android:paddingBottom="16dp"/>
+                android:text="Source code available online, licensed under GPLv3\nwww.github.com/artificialnull/generalissimo"
+                android:paddingBottom="16dp"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -54,7 +55,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="keyboardfire.com - \@KeyboardFire on GitHub"
+                android:text="www.keyboardfire.com - \@KeyboardFire on GitHub"
                 android:autoLink="web"
                 android:paddingBottom="16dp"/>
             <TextView

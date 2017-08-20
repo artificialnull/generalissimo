@@ -25,10 +25,11 @@ public class SettingsFragment extends PreferenceFragment {
                         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
                         SharedPreferences.Editor editor = settings.edit();
                         editor.remove("dippyPasswd");
-                        editor.remove("dippyUsernm");
+                        editor.putString("dippyUsernm", "LogOut");
                         editor.apply();
                         Toast.makeText(getActivity().getApplicationContext(), "Logged out of webDiplomacy",
                                 Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
                         return true;
                     }
                 }
