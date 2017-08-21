@@ -83,12 +83,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCredentialsGotten(String username, String password) {
-
         Log.v("CREDENTIALS_GOTTEN", username + " - " + password);
+
+        // webDiplomacy caps usernames and passwords at 30 characters
+        username = username.substring(0, Math.min(username.length(), 30));
+        password = password.substring(0, Math.min(password.length(), 30));
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("dippyUsernm", username.substring(0, Math.min(username.length(), 30)));
-        editor.putString("dippyPasswd", password.substring(0, Math.min(password.length(), 30)));
+        editor.putString("dippyUsernm", username);
+        editor.putString("dippyPasswd", password);
         editor.apply();
 
         new ValidateCredentialsTask().execute(username, password);
