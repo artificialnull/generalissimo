@@ -97,7 +97,6 @@ public class InputFragment extends Fragment {
             for (Element game : games) {
 
                 String variantTitle = game.className().substring(21);
-                Log.v("VARIANT_NAME", variantTitle);
 
                 CSSStyleSheet styles = null;
                 try {
@@ -123,7 +122,6 @@ public class InputFragment extends Fragment {
                 Element gameTimeRemaining = game.select(".timeremaining").first();
 
                 newGame.setGameTimeOfPhase(Long.parseLong(gameTimeRemaining.attr("unixtime")));
-                Log.v(newGame.getGameName(), String.valueOf(newGame.getGameTimeOfPhase()));
 
                 Element gamePhaseLine = game.select(".titleBarRightSide").get(1);
                 newGame.setGamePhaseDate(
@@ -157,7 +155,6 @@ public class InputFragment extends Fragment {
                                         int g = Integer.parseInt(colors[1]);
                                         int b = Integer.parseInt(colors[2]);
 
-                                        Log.v("OldNationColor", String.format("#%02x%02x%02x", r, g, b));
 
                                         float[] hsv = new float[3];
 
@@ -191,7 +188,6 @@ public class InputFragment extends Fragment {
                 //nation.setUnits(gameUnitLine.text().split(", ")[1]);
 
                 newGame.setGameNation(nation);
-                Log.v("NewNationColor", newGame.getGameNation().getColor());
 
                 try {
                     Element gameUserDetail = game.select(".memberUserDetail").first();
@@ -230,9 +226,6 @@ public class InputFragment extends Fragment {
                         .show();
                 mSwipeRefreshLayout.setRefreshing(false);
             } else {
-                for (DiplomacyGame diplomacyGame : diplomacyGames) {
-                    Log.v(diplomacyGame.getGameIDStr(), diplomacyGame.getGameName());
-                }
                 startRecyclerRefresh();
             }
         }

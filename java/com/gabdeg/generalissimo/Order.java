@@ -161,7 +161,6 @@ public class Order {
                 return choice;
             } catch (Exception err) {
                 //err.printStackTrace();
-                Log.v("JSON_FAILED", choiceID + ": " + choiceJSON.toString());
             }
             return null;
         }
@@ -318,7 +317,6 @@ public class Order {
                 if (this.getSelectedToTerr() != null) {
                     if (this.getSelectedToTerr().getName().contains("convoy")) {
                         toReturn.put("viaConvoy", "Yes");
-                        Log.v("CONVOY_STUFF", this.getSelectedToTerr().toString());
                         if (!this.getSelectedToTerr().getResultFromID("Yes").getPrefix().equals("")) {
                             try {
                                 toReturn.put("convoyPath", new JSONArray(
@@ -331,7 +329,6 @@ public class Order {
                     } else {
                         toReturn.put("viaConvoy", "");
                         if (this.getSelectedType().getId().equals("Convoy") || this.getSelectedType().getId().equals("Support move")) {
-                            Log.v("CONVOY_ORDER_STRUCTURE", this.getSelectedType().toString());
                             if (this.getSelectedFromTerr().getResults().size() > 0) {
                                 if (!this.getSelectedFromTerr().getResultFromID("Yes").getPrefix().equals("")) {
                                     try {
@@ -435,17 +432,14 @@ public class Order {
                     );
                 } else if (key.equals("OrderInfo")) {
                     orderInfo = orderJSON.getJSONObject("OrderInfo");
-                    Log.v("ORDER_INFO", "Found it!");
                 } else {
                     JSONObject choiceJSON = orderJSON.getJSONObject(key);
-                    Log.v("JSON_RECV", choiceJSON.toString());
                     this.addToChoices(
                             new Choice().loadChoiceFromJSON(choiceJSON, key)
                     );
                 }
             }
 
-            Log.v("PREFIX", this.getOrderPrefix());
             this.setSelectedType(
                     this.getChoiceFromID(orderInfo.getString("type"))
             );
@@ -454,26 +448,22 @@ public class Order {
                     orderInfo.getString("id")
             );
 
-            Log.v("SET_TYPE", this.getSelectedType().getName());
 
             if (this.getSelectedType().getResults().size() > 0) {
                 this.setSelectedToTerr(
                         this.getSelectedType().getResultFromID(orderInfo.getString("toTerrID"))
                 );
-                Log.v("SET_TO", this.getSelectedToTerr().getName());
 
                 if (this.getSelectedToTerr().getResults().size() > 0) {
                     if (orderInfo.getString("fromTerrID").equals("")) {
                         this.setSelectedViaConvoy(
                                 this.getSelectedToTerr().getResultFromID(orderInfo.getString("viaConvoy"))
                         );
-                        Log.v("SET_VIA", this.getSelectedViaConvoy().getName());
 
                     } else {
                         this.setSelectedFromTerr(
                                 this.getSelectedToTerr().getResultFromID(orderInfo.getString("fromTerrID"))
                         );
-                        Log.v("SET_FROM", this.getSelectedFromTerr().getName());
                     }
                 }
             }

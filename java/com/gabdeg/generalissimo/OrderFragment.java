@@ -87,7 +87,6 @@ public class OrderFragment extends Fragment {
                     .append("; domain=").append(cookie.getDomain())
                     .append("; path=").append(cookie.getPath())
                     .toString();
-            Log.v("Cookie", cookie.toString());
 
             CookieManager.getInstance().setCookie(url, setCookie);
         }
@@ -188,7 +187,6 @@ public class OrderFragment extends Fragment {
                 paramStr += "&contextKey=";
                 paramStr += OrderFragment.this.sessionData.getString(1);
                 paramStr += "&_=";
-                Log.v("ORDERS_TO_JSON", paramStr);
 
                 String link = "http://webdiplomacy.net/ajax.php";
                 if (ints[0] == 1) {
@@ -198,7 +196,6 @@ public class OrderFragment extends Fragment {
                         link += "?notready=on";
                     }
                 }
-                Log.v("SUBMIT_LINK", link);
 
                 browser.post(
                         link,
@@ -232,7 +229,6 @@ public class OrderFragment extends Fragment {
         try {
             this.unitData = new JSONArray(unitData);
             this.orders.clear();
-            Log.v("Number of units recv", String.valueOf(this.unitData.length()));
             for (int i = 0; i < this.unitData.length(); i++) {
                 Order order = new Order();
                 order.loadFromJSONObject(this.unitData.getJSONObject(i));
@@ -258,7 +254,6 @@ public class OrderFragment extends Fragment {
                                 buttonLayout.setVisibility(View.VISIBLE);
                             }
                             isFinishedLoading = true;
-                            Log.v("ORDER_FRAGMENT", "Finished loading here!");
                             if (getActivity() != null) {
                                 ((GameActivity) getActivity()).isFinished();
                             }
@@ -276,14 +271,10 @@ public class OrderFragment extends Fragment {
     public void setSessionData(String sessionData) {
         sessionData = sessionData.replace("\\", "");
         sessionData = sessionData.substring(1, sessionData.length() - 1);
-        Log.v("SESSION_STRINGS", sessionData);
         try {
             if (this.sessionData != null) {
-                Log.v("PAST_TURN", this.sessionData.getJSONObject(0).getString("turn"));
-                Log.v("THIS_TURN", new JSONArray(sessionData).getJSONObject(0).getString("turn"));
                 if (new JSONArray(sessionData).getJSONObject(0).getInt("turn") >
                         this.sessionData.getJSONObject(0).getInt("turn")) {
-                    Log.v("GAME_ADVANCED", "Wahoo!");
                     getActivity().runOnUiThread(
                             new Runnable() {
                                 @Override
@@ -302,7 +293,6 @@ public class OrderFragment extends Fragment {
                             @Override
                             public void run() {
                                 readyButton.setText("not ready");
-                                Log.v("READINESS", "IS_READY");
                                 isReady = true;
                             }
                         }
@@ -328,9 +318,7 @@ public class OrderFragment extends Fragment {
             unitOrders.clear();
             orderStr = orderStr.replace("\\", "");
             orderStr = orderStr.substring(1, orderStr.length() - 1);
-            Log.v("ORDERS_DATA", orderStr);
             JSONArray orderJSON = new JSONArray(orderStr);
-            Log.v("NUMBER_OF_ORDERS", String.valueOf(orderJSON.length()));
             Elements units = parser.select(".order");
             for (int i = 0; i < orderJSON.length(); i++) {
                 UnitOrder newUnitOrder = new UnitOrder();
@@ -378,25 +366,21 @@ public class OrderFragment extends Fragment {
         }
         @JavascriptInterface
         public void showHTML(String html) {
-            Log.v("SHOW_HTML", "METHOD RUN");
             OrderFragment.this.setGameHTML(html);
         }
 
         @JavascriptInterface
         public void getUnitData(String unitData) {
-            Log.v("SET_UNIT_DATA", "METHOD RUN");
             OrderFragment.this.setUnitData(unitData);
         }
 
         @JavascriptInterface
         public void getSessionData(String sessionData) {
-            Log.v("SET_SESSION_DATA", "METHOD RUN");
             OrderFragment.this.setSessionData(sessionData);
         }
 
         @JavascriptInterface
         public void getOrdersData(String orderStr) {
-            Log.v("GET_ORDERS_DATA", "METHOD RUN");
             OrderFragment.this.parseOrdersFromStr(orderStr);
         }
     }
@@ -407,7 +391,6 @@ public class OrderFragment extends Fragment {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
-                Log.v("COOKIE", CookieManager.getInstance().getCookie(url));
 
                 String orderJS = null;
                 try {
@@ -446,7 +429,6 @@ public class OrderFragment extends Fragment {
         webView.loadUrl("http://webdiplomacy.net/board.php?gameID=" + String.valueOf(gameID));
 
         mAdapter = new OrderAdapter(orders, (AppCompatActivity) getActivity());
-        Log.v("ORDERS", String.valueOf(orders.size()));
         mRecyclerView.setAdapter(mAdapter);
 
     }

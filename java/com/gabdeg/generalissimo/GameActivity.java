@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -48,7 +47,6 @@ public class GameActivity extends AppCompatActivity {
         });
         mSwipeRefreshLayout.setRefreshing(true);
 
-        Log.v("GAME_ID", String.valueOf(game.getGameID()));
 
         Bundle args = new Bundle();
         args.putSerializable(GAME_INFO, game);
@@ -80,7 +78,6 @@ public class GameActivity extends AppCompatActivity {
     public void refreshGame() {
         mSwipeRefreshLayout.setRefreshing(true);
 
-        Log.v("GAME_FRAGMENT", "REFRESHING!");
         infoFragment.refreshInfo();
         messageFragment.refreshNeighbors();
         orderFragment = new OrderFragment();
@@ -96,11 +93,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public void isFinished() {
-        Log.v("IS_FINISHED", "Someone finished doing something I guess...");
         if (orderFragment.isFinishedLoading && infoFragment.isFinishedLoading
                 && messageFragment.isFinishedLoading) {
             mSwipeRefreshLayout.setRefreshing(false);
-            Log.v("EVERYONE_IS_FINISHED", "Wahoo!");
         }
     }
 

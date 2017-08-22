@@ -28,11 +28,6 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        Map<String, ?> allEntries = settings.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            Log.v("MAP_VALUES", entry.getKey() + ": " + entry.getValue().toString());
-        }
-
         Intent alarmIntent = new Intent(this, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -42,12 +37,6 @@ public class MainActivity extends AppCompatActivity {
                 ),
                 pendingIntent
         );
-
-        Log.v("SET_ALARM", "Setting alarm for every "
-                + String.valueOf(settings.getString("notifCheckInterval", "1337"))
-                + " milliseconds"
-        );
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -66,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getUserCredentials(boolean wasInvalid) {
-        Log.v("GET_CREDENTIALS", "Getting...");
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = settings.edit();
         editor.remove("dippyPasswd");
@@ -83,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onCredentialsGotten(String username, String password) {
-        Log.v("CREDENTIALS_GOTTEN", username + " - " + password);
-
         // webDiplomacy caps usernames and passwords at 30 characters
         username = username.substring(0, Math.min(username.length(), 30));
         password = password.substring(0, Math.min(password.length(), 30));
@@ -113,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                         "loginuser=" + username + "&loginpass=" + password
                 );
 
-                Log.v("POST_RESULT", result);
                 if (result.contains("<title>Error - webDiplomacy</title>")) {
                     return 1;
                 }

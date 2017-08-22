@@ -38,7 +38,6 @@ public class Networker {
                             ";", cookieManager.getCookieStore().getCookies()
                     )
             );
-            Log.v("GET", "There exist >0 cookies");
         }
         return urlConnection.getInputStream();
     }
@@ -74,7 +73,6 @@ public class Networker {
         if (cookieHeader != null) {
             for (String cookie : cookieHeader) {
                 cookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
-                Log.v("POST", "Cookie: " + cookie);
             }
         }
 

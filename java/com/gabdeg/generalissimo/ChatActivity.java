@@ -8,8 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -49,9 +47,6 @@ public class ChatActivity extends AppCompatActivity {
 
         chatInfo = (NationChatPair) getIntent().getExtras().getSerializable(CHAT_INFO);
         nationInfo = (Nation) getIntent().getExtras().getSerializable(NATION_INFO);
-        Log.v("CHAT_URL", chatInfo.getChat().getUrl());
-        Log.v("PLAYING", nationInfo.getName());
-
         setContentView(R.layout.activity_chat);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.chat_recycler_view);
@@ -170,12 +165,10 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             Element chatBox = parser.select("div#chatboxscroll").first().select("table.chatbox").first();
-            Log.v("CHAT_HTML", chatBox.html());
             Elements messages = chatBox.select("tr");
 
             String variantTitle = parser.select(".gamePanel").first().className().split(" ")[1]
                     .replace("variant", "");
-            Log.v("VARIANT_NAME", variantTitle);
 
             CSSStyleSheet styles = null;
             try {
@@ -236,8 +229,6 @@ public class ChatActivity extends AppCompatActivity {
                                     int g = Integer.parseInt(colors[1]);
                                     int b = Integer.parseInt(colors[2]);
 
-                                    Log.v("OldNationColor", String.format("#%02x%02x%02x", r, g, b));
-
                                     float[] hsv = new float[3];
 
                                     Color.RGBToHSV(r, g, b, hsv);
@@ -266,20 +257,15 @@ public class ChatActivity extends AppCompatActivity {
 
         protected void onPostExecute(Integer status) {
             if (status == 0) {
-                for (ChatMessage msg : msgs) {
-                    Log.v("CHAT_MESSAGE", msg.toString());
-                }
                 mAdapter.notifyDataSetChanged();
                 mRecyclerView.scrollToPosition(msgs.size() - 1);
                 mSwipeRefreshLayout.setRefreshing(false);
                 if (!chatInfo.getChat().canChat()) {
-                    Log.v("CAN_CHAT", "NOPE NOPE NOPE");
                     ((EditText) findViewById(R.id.message_text_input))
                             .setFocusable(false);
                 } else {
                     ((EditText) findViewById(R.id.message_text_input))
                             .setFocusableInTouchMode(true);
-                    Log.v("CHAT_RAND", chatInfo.getChat().getRand());
                 }
 
             }

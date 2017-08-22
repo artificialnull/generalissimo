@@ -50,10 +50,6 @@ public class SettingsFragment extends PreferenceFragment {
                                 pendingIntent
                         );
 
-                        Log.v("SET_ALARM", "Setting alarm for every "
-                                + newValue
-                                + " milliseconds"
-                        );
                         return true;
                     }
                 }

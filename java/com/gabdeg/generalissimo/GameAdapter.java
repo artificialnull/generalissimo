@@ -128,7 +128,6 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.ViewHolder> {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.v("CARD_VIEW_ON_CLICK", "Got Click!");
                         //int gameID = diplomacyGames.get(holder.getLayoutPosition()).getGameID();
 
                         Intent intent = new Intent(mContext, GameActivity.class);

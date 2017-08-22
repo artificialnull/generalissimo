@@ -74,7 +74,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
         if (list.size() == 0) {
             //holder.orderTextPrefix.setText(order.getChoices().get(0).getPrefix());
-            Log.v("DISPLAY", order.getOrderPrefix());
             ArrayList<Order.Choice> choices = order.getChoices();
             ArrayAdapter<String> typeAdapter = new ArrayAdapter<String>(
                     mContext,
@@ -155,7 +154,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
 
                                                 if (selectedChoice.getResults().size() != 0) {
                                                     if (selectedChoice.getResultFromName("via convoy") != null && selectedChoice.getResultFromName("via land") != null) {
-                                                        Log.v("THIS", "should never happen?");
                                                         ArrayAdapter<String> viaConvoyAdapter = new ArrayAdapter<String>(
                                                                 mContext,
                                                                 R.layout.order_spinner_item,
@@ -199,7 +197,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                                                                     || selectedChoice.getResultFromName("via land") != null
                                                             )
                                                             ){
-                                                        Log.v("TRUE", holder.orderTextPrefix.getText().toString());
                                                         holder.orderFromPrefix.setText(selectedChoice.getResults().get(0).getPrefix());
 
                                                         ArrayAdapter<String> fromTerrAdapter = new ArrayAdapter<String>(
@@ -207,10 +204,6 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
                                                                 R.layout.order_spinner_item,
                                                                 selectedChoice.getResultNames()
                                                         );
-
-                                                        for (String name : selectedChoice.getResultNames()) {
-                                                            Log.v("RESULT_NAME", name);
-                                                        }
 
                                                         fromTerrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                                                         holder.orderFromTerrSpinner.setAdapter(fromTerrAdapter);

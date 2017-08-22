@@ -53,7 +53,6 @@ public class MapActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         getSupportActionBar().setTitle(game.getGameName());
-        Log.v("GAME_ID", String.valueOf(gameID));
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.map_swipe_layout);
         mSwipeRefreshLayout.setDistanceToTriggerSync(480);
 
@@ -159,15 +158,12 @@ public class MapActivity extends AppCompatActivity {
                 parser.loadFromStr(gamePage);
                 mapUrl = parser.select("#LargeMapLink").attr("href");
             }
-            Log.v("MAP_URL", mapUrl);
             String[] mapQueries = mapUrl.split("&");
             int currentTurn = Integer.valueOf(mapQueries[1].split("=")[1]);
             mapQueries[1] = (gameGoToFirst ? "turn=-1" : mapQueries[1].split("=")[0] + "=" + String.valueOf(currentTurn + gameTurnOffset));
-            Log.v("MAP_TURN", mapQueries[1]);
             mapUrl = StringUtils.join(mapQueries, "&");
             gameGoToFirst = false;
             gameTurnOffset = 0;
-            Log.v("MAP_URL", mapUrl);
 
             Drawable mapImage = getDrawableFromURL("http://webdiplomacy.net/" + mapUrl  +
                     (isPreviewing ? "&preview" : ""));
@@ -186,7 +182,6 @@ public class MapActivity extends AppCompatActivity {
                 image.setDisplayType(ImageViewTouchBase.DisplayType.FIT_TO_SCREEN);
                 image.setImageDrawable(map, null, 0.99f, 5);
             } catch (NullPointerException e) {
-                Log.v("nullptr", "GetMapTask.onPostExecute");
             }
             isFinishedLoading = true;
             mSwipeRefreshLayout.setRefreshing(false);

@@ -126,7 +126,6 @@ public class InfoFragment extends Fragment {
                 unitCount.setTextColor(defaultTextColor);
             }
         } catch (NumberFormatException err) {
-            Log.v("PARSE_INT", "Couldnt PRASE!!IO");
             unitCount.setTextColor(defaultTextColor);
         }
 
@@ -229,7 +228,6 @@ public class InfoFragment extends Fragment {
                     game.setGameOrderStatus("None");
                 }
 
-                Log.v("GAMEUSERDETAIL", gameUserDetail.html());
                 if (gameUserDetail.html().contains("Unread message")) {
                     game.setGameMessageStatus(true);
                 } else {
@@ -261,7 +259,6 @@ public class InfoFragment extends Fragment {
         protected void onPostExecute(Void voido) {
             updateGameView();
             isFinishedLoading = true;
-            Log.v("INFO_FRAGMENT", "Finished loading here!");
             if (getActivity() != null) {
                 ((GameActivity) getActivity()).isFinished();
             }

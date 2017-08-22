@@ -122,7 +122,6 @@ public class NationAdapter extends RecyclerView.Adapter<NationAdapter.ViewHolder
                         mContext.getResources().getColor(android.R.color.secondary_text_dark));
             }
         } catch (NumberFormatException err) {
-            Log.v("PARSE_INT", "Couldnt PRASE!!IO");
         }
 
         if (chat == null) {

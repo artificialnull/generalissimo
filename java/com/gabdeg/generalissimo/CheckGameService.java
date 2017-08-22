@@ -11,7 +11,6 @@ import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.steadystate.css.parser.CSSOMParser;
@@ -41,40 +40,11 @@ public class CheckGameService extends IntentService {
     public void onHandleIntent(Intent workIntent){
         String dataString = workIntent.getDataString();
 
-        /*
-        for (int i = 0; i < cookieManager.getCookieStore().getCookies().size(); i++) {
-            Log.v("ALARM_COOKIE", "Already have: "
-                    + cookieManager.getCookieStore().getCookies().get(i)
-            );
-        }
-
-        if (CookieHandler.getDefault() != null) {
-            for (int i = 0;
-                 i < ((CookieManager) CookieHandler.getDefault())
-                         .getCookieStore().getCookies().size();
-                    i++) {
-                cookieManager.getCookieStore().add(null,
-                        ((CookieManager) CookieHandler.getDefault()).getCookieStore()
-                                .getCookies().get(i)
-                );
-                Log.v("ALARM_COOKIE", "Added cookie to store: " + ((CookieManager) CookieHandler
-                        .getDefault()).getCookieStore()
-                        .getCookies().get(i));
-            }
-
-        } else {
-            CookieHandler.setDefault(cookieManager);
-        }
-
-        Log.v("CookieStore", ((CookieManager) CookieHandler.getDefault()).getCookieStore()
-                .getCookies().toString());
-        */
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String username = settings.getString("dippyUsernm", null);
         String password = settings.getString("dippyPasswd", null);
         if (password == null) {
-            Log.v("ALARM_PASSWD", "Password is NULL!");
             return;
         }
 
@@ -94,7 +64,6 @@ public class CheckGameService extends IntentService {
 
             homePage = browser.getAsString("http://webdiplomacy.net/index.php");
             parser.loadFromStr(homePage);
-            //Log.v("ALARM_HOMEPAGE", homePage);
             Element gamePanel = parser.select(".homeGamesStats").first();
             games = gamePanel.select(".gamePanelHome");
         } catch (Exception err) {
@@ -104,7 +73,6 @@ public class CheckGameService extends IntentService {
         for (Element game : games) {
 
             String variantTitle = game.className().substring(21);
-            Log.v("VARIANT_NAME", variantTitle);
 
             CSSStyleSheet styles = null;
             try {
@@ -127,11 +95,9 @@ public class CheckGameService extends IntentService {
             newGame.setGameID(Integer.parseInt(gameTitleBar.attr("gameid")));
             newGame.setGameName(gameTitleBar.text());
 
-            Log.v("ALARM_GAME_CHECKED", newGame.getGameName());
 
             Element gameTimeRemaining = game.select(".timeremaining").first();
             newGame.setGameTimeOfPhase(Long.parseLong(gameTimeRemaining.attr("unixtime")));
-            Log.v(newGame.getGameName(), String.valueOf(newGame.getGameTimeOfPhase()));
 
             Element gamePhaseLine = game.select(".titleBarRightSide").get(1);
             newGame.setGamePhaseDate(
@@ -165,7 +131,6 @@ public class CheckGameService extends IntentService {
                                     int g = Integer.parseInt(colors[1]);
                                     int b = Integer.parseInt(colors[2]);
 
-                                    Log.v("OldNationColor", String.format("#%02x%02x%02x", r, g, b));
 
                                     float[] hsv = new float[3];
 
@@ -199,7 +164,6 @@ public class CheckGameService extends IntentService {
             //nation.setUnits(gameUnitLine.text().split(", ")[1]);
 
             newGame.setGameNation(nation);
-            Log.v("NewNationColor", newGame.getGameNation().getColor());
 
 
             try {
@@ -214,7 +178,6 @@ public class CheckGameService extends IntentService {
                     if (settings.getBoolean("notifNMRStatus", true)) {
                         gameStatus += "No orders received";
                     } else {
-                        Log.v("NOTIFS", "User chose to not get NMR notifs");
                     }
                 } else if (gameUserDetail.html().contains("not completed")) {
                     newGame.setGameOrderStatus("Not completed");
@@ -230,7 +193,6 @@ public class CheckGameService extends IntentService {
                         }
                         gameStatus += "Unread message";
                     } else {
-                        Log.v("NOTIFS", "User chose to not get Unread notifs");
                     }
                 } else {
                     newGame.setGameMessageStatus(false);
@@ -292,7 +254,6 @@ public class CheckGameService extends IntentService {
                     notifManager.notify(newGame.getGameID(), notif);
                 } else if (settings.getString(String.valueOf(newGame.getGameID()), "CrashOverride")
                         .equals(newGame.getGamePhaseDate() + newGame.getGamePhaseType())) {
-                    Log.v("NOTIFS", "User dismissed notifs for this phase of this game");
                 }
 
             } catch (NullPointerException err) {

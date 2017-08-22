@@ -140,7 +140,6 @@ public class MessageFragment extends Fragment {
 
             String variantTitle = parser.select(".gamePanel").first().className().split(" ")[1]
                     .replace("variant", "");
-            Log.v("VARIANT_NAME", variantTitle);
 
             CSSStyleSheet styles = null;
             try {
@@ -176,7 +175,6 @@ public class MessageFragment extends Fragment {
                 );
             } catch (Exception err) {
                 globalChat = null;
-                Log.v("CHAT_FINDER", "Could not find chat for nation GLOBAL");
             }
 
             nations.add(new NationChatPair(
@@ -261,7 +259,6 @@ public class MessageFragment extends Fragment {
                                     int g = Integer.parseInt(colors[1]);
                                     int b = Integer.parseInt(colors[2]);
 
-                                    Log.v("OldNationColor", String.format("#%02x%02x%02x", r, g, b));
 
                                     float[] hsv = new float[3];
 
@@ -295,7 +292,6 @@ public class MessageFragment extends Fragment {
                     nation.setOrderStatus("None");
                 }
 
-                Log.v("MESSAGE_NATION", nation.toString());
 
                 try {
                     chat.setUrl(
@@ -310,7 +306,6 @@ public class MessageFragment extends Fragment {
                     }
                 } catch (Exception err) {
                     chat = null;
-                    Log.v("CHAT_FINDER", "Could not find chat for nation " + nation.getName());
                 }
 
                 nations.add(new NationChatPair(nation, chat));
