@@ -1,6 +1,9 @@
 package com.gabdeg.generalissimo;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -32,7 +35,40 @@ public class GameActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle(game.getGameName());
 
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        new ValidateCredentialsTask().execute(
+                settings.getString("dippyUsernm", null),
+                settings.getString("dippyPasswd", null)
+        );
+    }
 
+    private class ValidateCredentialsTask extends AsyncTask<String, Void, Integer> {
+
+        protected Integer doInBackground(String... strings) {
+            Networker browser = new Networker();
+            String username = strings[0];
+            String password = strings[1];
+            try {
+                browser.postAsString(
+                        "http://webdiplomacy.net/index.php",
+                        "loginuser=" + username + "&loginpass=" + password
+                );
+            } catch (Exception err) {
+                err.printStackTrace();
+                return 1;
+            }
+            return 0;
+
+        }
+
+        protected void onPostExecute(Integer status) {
+            if (status == 0) {
+                onLoggedIn();
+            }
+        }
+    }
+
+    public void onLoggedIn() {
         infoFragment = new InfoFragment();
         orderFragment = new OrderFragment();
         messageFragment = new MessageFragment();
@@ -46,7 +82,6 @@ public class GameActivity extends AppCompatActivity {
             }
         });
         mSwipeRefreshLayout.setRefreshing(true);
-
 
         Bundle args = new Bundle();
         args.putSerializable(GAME_INFO, game);
@@ -66,7 +101,6 @@ public class GameActivity extends AppCompatActivity {
         transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.order_container, orderFragment);
         transaction.commit();
-
     }
 
     @Override

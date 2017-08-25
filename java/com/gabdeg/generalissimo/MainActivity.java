@@ -10,15 +10,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.Map;
-
-
 public class MainActivity extends AppCompatActivity {
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
