@@ -119,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
         InputFragment firstFragment = new InputFragment();
         firstFragment.setArguments(getIntent().getExtras());
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container, firstFragment).commit();
-
+                .replace(R.id.fragment_container, firstFragment).commit();
 
         getSupportActionBar().setTitle("Home");
     }
